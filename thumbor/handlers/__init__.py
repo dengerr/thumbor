@@ -12,6 +12,7 @@ import functools
 from os.path import splitext
 import datetime
 import traceback
+from urlparse import urlparse
 
 import tornado.web
 
@@ -60,7 +61,7 @@ class BaseHandler(tornado.web.RequestHandler):
         req = self.context.request
         conf = self.context.config
 
-        req.extension = splitext(req.image_url)[-1].lower()
+        req.extension = splitext(urlparse(req.image_url).path)[-1].lower()
 
         should_store = self.context.config.RESULT_STORAGE_STORES_UNSAFE or not self.context.request.unsafe
         if self.context.modules.result_storage and should_store:
